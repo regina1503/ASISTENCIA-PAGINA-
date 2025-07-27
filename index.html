@@ -171,7 +171,8 @@
         let confirmedAttendees = [];
 
         // Variable to hold the name of the guest currently interacting with the form
-        let currentGuestName = '';
+        // This will now be loaded from localStorage
+        let currentGuestName = localStorage.getItem('lastConfirmedGuestName') || '';
         let currentUserId = ''; // To store the authenticated user ID
 
         // Get DOM elements
@@ -187,7 +188,7 @@
 
         // Organizer View Elements
         const organizerViewDiv = document.getElementById('organizerView');
-        const organizerUserIdSpan = document.getElementById('organizerUserId'); // New element for User ID
+        const organizerUserIdSpan = document.getElementById('organizerUserId');
         const organizerAttendeeCountSpan = document.getElementById('organizerAttendeeCount');
         const organizerTotalPeopleCountSpan = document.getElementById('organizerTotalPeopleCount');
         const organizerAttendeeListTableBody = document.getElementById('organizerAttendeeList');
@@ -201,8 +202,8 @@
          * showing only the entry for the `currentGuestName` in the guest view.
          */
         function updateGuestAttendeeListDisplay() {
-            // Clear existing list
-            attendeeListTableBody.innerHTML = '';
+            console.log("updateGuestAttendeeListDisplay called. currentGuestName:", currentGuestName);
+            attendeeListTableBody.innerHTML = ''; // Clear existing list
 
             let confirmedForCurrentGuest = null;
             let totalPeopleForCurrentGuest = 0;
@@ -211,6 +212,7 @@
             // Find the confirmation for the current guest
             if (currentGuestName) {
                 confirmedForCurrentGuest = confirmedAttendees.find(attendee => attendee.name.toLowerCase() === currentGuestName.toLowerCase());
+                console.log("Confirmed for current guest:", confirmedForCurrentGuest);
             }
 
             if (confirmedForCurrentGuest) {
@@ -243,6 +245,7 @@
          * Updates the full list of attendees and total counts for the organizer view.
          */
         function updateOrganizerAttendeeListDisplay() {
+            console.log("updateOrganizerAttendeeListDisplay called. Confirmed attendees:", confirmedAttendees);
             organizerAttendeeListTableBody.innerHTML = ''; // Clear existing list
 
             let totalConfirmations = 0;
@@ -340,10 +343,13 @@
 
                 showMessage('¡Asistencia confirmada con éxito!', 'success', formMessage);
 
+                // Set current guest name and save to localStorage
+                currentGuestName = name;
+                localStorage.setItem('lastConfirmedGuestName', name);
+
                 // The onSnapshot listener will handle updating confirmedAttendees and the UI
-                currentGuestName = name; // Set current guest name for display filter
             } catch (e) {
-                console.error("Error adding document: ", e);
+                console.error("Error adding document to Firestore: ", e);
                 showMessage('Error al confirmar asistencia. Inténtalo de nuevo.', 'error', formMessage);
             }
 
@@ -457,11 +463,12 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUserId = user.uid;
-                organizerUserIdSpan.textContent = currentUserId; // Display user ID in organizer view
+                organizerUserIdSpan.textContent = currentUserId;
                 console.log("Authenticated with Firebase. User ID:", currentUserId);
 
                 // Set up real-time listener for attendees
                 onSnapshot(collection(db, ATTENDEES_COLLECTION_PATH), (snapshot) => {
+                    console.log("Firestore snapshot received.");
                     confirmedAttendees = []; // Clear previous data
                     snapshot.forEach((doc) => {
                         confirmedAttendees.push(doc.data());
@@ -477,6 +484,7 @@
             } else {
                 // Sign in anonymously if no token is provided or user is not authenticated
                 try {
+                    console.log("Attempting Firebase authentication...");
                     if (initialAuthToken) {
                         await signInWithCustomToken(auth, initialAuthToken);
                         console.log("Signed in with custom token.");
@@ -493,8 +501,10 @@
 
         // Initial setup when the page loads
         document.addEventListener('DOMContentLoaded', () => {
-            // Firebase authentication will handle initial data loading
+            // Firebase authentication will handle initial data loading via onAuthStateChanged
             // The organizer view is hidden by default
+            console.log("DOM Content Loaded. Initial guest name from localStorage:", currentGuestName);
+            // No need to call updateGuestAttendeeListDisplay here directly, onSnapshot will do it once data is loaded
         });
     </script>
 </body>
