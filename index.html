@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Asistencia</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for Inter font and general body styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to the top to prevent content overflow */
+            min-height: 100vh; /* Minimum height to fill the viewport */
+            padding: 2rem; /* Padding around the content */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+        /* Ensure responsive image handling if any were added */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto p-6 bg-white shadow-lg rounded-xl max-w-2xl w-full">
+        <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-8">Confirmar Asistencia</h1>
+
+        <!-- Attendance Confirmation Form -->
+        <div class="bg-blue-50 p-6 rounded-lg mb-8 border border-blue-200">
+            <h2 class="text-2xl font-semibold text-blue-700 mb-4">Tu Información</h2>
+            <form id="attendanceForm" class="space-y-4">
+                <div>
+                    <label for="name" class="block text-lg font-medium text-gray-700 mb-1">Nombre Completo (como en tu pase):</label>
+                    <input type="text" id="name" name="name" required list="nameSuggestions"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-lg">
+                    <datalist id="nameSuggestions"></datalist> <!-- Datalist for suggestions -->
+                    <p id="maxPassesInfo" class="text-sm text-gray-600 mt-1"></p>
+                </div>
+                <div>
+                    <label for="numberOfPeople" class="block text-lg font-medium text-gray-700 mb-1">Cuántos pases deseas confirmar (incluyéndote):</label>
+                    <input type="number" id="numberOfPeople" name="numberOfPeople" required min="1" value="1"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-lg">
+                </div>
+                <button type="submit"
+                        class="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-xl font-bold transition duration-200 ease-in-out transform hover:scale-105">
+                    Confirmar
+                </button>
+            </form>
+            <p id="formMessage" class="mt-4 text-center text-green-600 font-semibold hidden"></p>
+        </div>
+
+        <!-- Confirmed Attendee's Own Confirmation Display -->
+        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Tu Confirmación</h2>
+            <!-- These counts will now reflect only the current user's confirmation -->
+            <p class="text-xl font-bold text-gray-700 mb-4">Tu Confirmación Registrada: <span id="attendeeCount" class="text-blue-600">0</span></p>
+            <p class="text-xl font-bold text-gray-700 mb-4">Total de Personas en Tu Confirmación: <span id="totalPeopleCount" class="text-blue-600">0</span></p>
+
+            <div class="overflow-x-auto mb-6 max-h-80">
+                <table class="min-w-full bg-white rounded-lg shadow-sm">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left rounded-tl-lg">Nombre</th>
+                            <th class="py-3 px-6 text-left rounded-tr-lg">Número de Personas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendeeList" class="text-gray-700 text-base">
+                        <!-- Only the current user's confirmation will be listed here -->
+                        <tr class="border-b border-gray-200 last:border-b-0">
+                            <td class="py-3 px-6 text-left whitespace-nowrap" colspan="2">Aún no has confirmado tu asistencia.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Organizer View (Hidden by default) -->
+        <div id="organizerView" class="bg-red-50 p-6 rounded-lg border border-red-200 mt-8 hidden">
+            <h2 class="text-2xl font-semibold text-red-700 mb-4">Vista de Organizador</h2>
+            <p class="text-xl font-bold text-gray-700 mb-4">Total de Confirmaciones: <span id="organizerAttendeeCount" class="text-red-600">0</span></p>
+            <p class="text-xl font-bold text-gray-700 mb-4">Total de Personas Confirmadas: <span id="organizerTotalPeopleCount" class="text-red-600">0</span></p>
+
+            <div class="overflow-x-auto mb-6 max-h-80">
+                <table class="min-w-full bg-white rounded-lg shadow-sm">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left rounded-tl-lg">Nombre</th>
+                            <th class="py-3 px-6 text-left rounded-tr-lg">Número de Personas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="organizerAttendeeList" class="text-gray-700 text-base">
+                        <!-- All confirmed attendees will be listed here for the organizer -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Download Button -->
+            <button id="downloadBtn"
+                    class="w-full bg-green-600 text-white py-3 px-6 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-xl font-bold transition duration-200 ease-in-out transform hover:scale-105">
+                Descargar Lista Completa (CSV)
+            </button>
+        </div>
+
+        <!-- Organizer Login Section -->
+        <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-200 mt-8">
+            <h2 class="text-2xl font-semibold text-yellow-700 mb-4">Acceso de Organizador</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="organizerPassword" class="block text-lg font-medium text-gray-700 mb-1">Contraseña de Organizador:</label>
+                    <input type="password" id="organizerPassword"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 text-lg">
+                </div>
+                <button id="loginOrganizerBtn"
+                        class="w-full bg-yellow-600 text-white py-3 px-6 rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-xl font-bold transition duration-200 ease-in-out transform hover:scale-105">
+                    Acceder como Organizador
+                </button>
+            </div>
+            <p id="organizerMessage" class="mt-4 text-center text-red-600 font-semibold hidden"></p>
+        </div>
+
+    </div>
+
+    <script>
+        // Global variables provided by the Canvas environment (not used in this simple app)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Predefined list of passes with maximum people allowed for each name
+        // YOU CAN EDIT THIS LIST TO MATCH YOUR GUEST PASSES
+        // IMPORTANT: This list is in the client-side code. For true security and multi-user access control,
+        // this data should be managed on a secure backend and accessed via an authenticated API.
+        let passList = [
+            { name: "Regina Contreras", maxPeople: 4 },
+            { name: "Lupita Contreras", maxPeople: 2 },
+            { name: "Mauro Contreras", maxPeople: 6 },
+            { name: "Reina Ruiz", maxPeople: 2 },
+            { name: "Romina Perez", maxPeople: 2 },
+            { name: "Martha Aguilar", maxPeople: 2 },
+            { name: "Juan Perez", maxPeople: 2 },
+            { name: "Maria Garcia", maxPeople: 3 },
+            { name: "Carlos Sanchez", maxPeople: 1 },
+            { name: "Ana Lopez", maxPeople: 4 },
+            { name: "Pedro Martinez", maxPeople: 2 },
+            { name: "Sofia Rodriguez", maxPeople: 1 }
+        ];
+
+        // Organizer Password (VERY IMPORTANT: Change this to a strong password!)
+        const ORGANIZER_PASSWORD = "miContrasenaSecreta"; // <<< CAMBIA ESTO A UNA CONTRASEÑA SEGURA
+
+        // Array to store ALL confirmed attendees (this array holds all data for the organizer)
+        let confirmedAttendees = [];
+
+        // Variable to hold the name of the guest currently interacting with the form
+        let currentGuestName = '';
+
+        // Get DOM elements
+        const attendanceForm = document.getElementById('attendanceForm');
+        const nameInput = document.getElementById('name');
+        const nameSuggestionsDatalist = document.getElementById('nameSuggestions'); // New: Datalist element
+        const numberOfPeopleInput = document.getElementById('numberOfPeople');
+        const attendeeCountSpan = document.getElementById('attendeeCount');
+        const totalPeopleCountSpan = document.getElementById('totalPeopleCount');
+        const attendeeListTableBody = document.getElementById('attendeeList'); // Guest's own confirmation table
+        const formMessage = document.getElementById('formMessage');
+        const maxPassesInfo = document.getElementById('maxPassesInfo');
+
+        // Organizer View Elements
+        const organizerViewDiv = document.getElementById('organizerView');
+        const organizerAttendeeCountSpan = document.getElementById('organizerAttendeeCount');
+        const organizerTotalPeopleCountSpan = document.getElementById('organizerTotalPeopleCount');
+        const organizerAttendeeListTableBody = document.getElementById('organizerAttendeeList'); // Organizer's full list table
+        const downloadBtn = document.getElementById('downloadBtn');
+        const organizerPasswordInput = document.getElementById('organizerPassword');
+        const loginOrganizerBtn = document.getElementById('loginOrganizerBtn');
+        const organizerMessage = document.getElementById('organizerMessage');
+
+        /**
+         * Updates the displayed list of attendees and the total count,
+         * showing only the entry for the `currentGuestName` in the guest view.
+         */
+        function updateGuestAttendeeListDisplay() {
+            // Clear existing list
+            attendeeListTableBody.innerHTML = '';
+
+            let confirmedForCurrentGuest = null;
+            let totalPeopleForCurrentGuest = 0;
+            let confirmationCountForCurrentGuest = 0;
+
+            // Find the confirmation for the current guest
+            if (currentGuestName) {
+                confirmedForCurrentGuest = confirmedAttendees.find(attendee => attendee.name.toLowerCase() === currentGuestName.toLowerCase());
+            }
+
+            if (confirmedForCurrentGuest) {
+                // Display the current guest's confirmation
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-200 last:border-b-0 hover:bg-gray-100';
+                row.innerHTML = `
+                    <td class="py-3 px-6 text-left whitespace-nowrap">${confirmedForCurrentGuest.name}</td>
+                    <td class="py-3 px-6 text-left">${confirmedForCurrentGuest.numberOfPeople}</td>
+                `;
+                attendeeListTableBody.appendChild(row);
+                totalPeopleForCurrentGuest = confirmedForCurrentGuest.numberOfPeople;
+                confirmationCountForCurrentGuest = 1; // Only one confirmation entry per guest
+            } else {
+                // Display a message if the current guest has not confirmed yet
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-200 last:border-b-0';
+                row.innerHTML = `
+                    <td class="py-3 px-6 text-left whitespace-nowrap" colspan="2">Aún no has confirmado tu asistencia.</td>
+                `;
+                attendeeListTableBody.appendChild(row);
+            }
+
+            // Update the counts for the current guest's display
+            attendeeCountSpan.textContent = confirmationCountForCurrentGuest;
+            totalPeopleCountSpan.textContent = totalPeopleForCurrentGuest;
+        }
+
+        /**
+         * Updates the full list of attendees and total counts for the organizer view.
+         */
+        function updateOrganizerAttendeeListDisplay() {
+            organizerAttendeeListTableBody.innerHTML = ''; // Clear existing list
+
+            let totalConfirmations = 0;
+            let totalPeopleOverall = 0;
+
+            if (confirmedAttendees.length === 0) {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-200 last:border-b-0';
+                row.innerHTML = `
+                    <td class="py-3 px-6 text-left whitespace-nowrap" colspan="2">No hay asistentes confirmados aún.</td>
+                `;
+                organizerAttendeeListTableBody.appendChild(row);
+            } else {
+                confirmedAttendees.forEach(attendee => {
+                    const row = document.createElement('tr');
+                    row.className = 'border-b border-gray-200 last:border-b-0 hover:bg-gray-100';
+                    row.innerHTML = `
+                        <td class="py-3 px-6 text-left whitespace-nowrap">${attendee.name}</td>
+                        <td class="py-3 px-6 text-left">${attendee.numberOfPeople}</td>
+                    `;
+                    organizerAttendeeListTableBody.appendChild(row);
+                    totalConfirmations++;
+                    totalPeopleOverall += attendee.numberOfPeople;
+                });
+            }
+
+            organizerAttendeeCountSpan.textContent = totalConfirmations;
+            organizerTotalPeopleCountSpan.textContent = totalPeopleOverall;
+        }
+
+        /**
+         * Displays a message to the user for a short period.
+         * @param {string} message - The message to display.
+         * @param {string} type - The type of message ('success', 'error', 'warning', 'info').
+         * @param {HTMLElement} targetElement - The element where the message should be displayed.
+         */
+        function showMessage(message, type, targetElement) {
+            targetElement.textContent = message;
+            targetElement.classList.remove('hidden', 'text-green-600', 'text-red-600', 'text-orange-600', 'text-blue-600');
+            if (type === 'success') {
+                targetElement.classList.add('text-green-600');
+            } else if (type === 'error') {
+                targetElement.classList.add('text-red-600');
+            } else if (type === 'warning') {
+                targetElement.classList.add('text-orange-600');
+            } else if (type === 'info') {
+                targetElement.classList.add('text-blue-600');
+            }
+            targetElement.classList.remove('hidden');
+
+            setTimeout(() => {
+                targetElement.classList.add('hidden');
+            }, 3000);
+        }
+
+        /**
+         * Handles the form submission to add/update a new attendee, with pass validation.
+         * This function manages the internal `confirmedAttendees` array (all data for organizer).
+         */
+        attendanceForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            const name = nameInput.value.trim();
+            const numberOfPeople = parseInt(numberOfPeopleInput.value.trim(), 10);
+
+            // Validate input
+            if (!name || isNaN(numberOfPeople) || numberOfPeople <= 0) {
+                showMessage('Por favor, completa un nombre válido y un número de personas mayor que 0.', 'error', formMessage);
+                return;
+            }
+
+            // Find the pass entry for the given name (case-insensitive)
+            const passEntry = passList.find(pass => pass.name.toLowerCase() === name.toLowerCase());
+
+            if (!passEntry) {
+                showMessage('El nombre no se encuentra en la lista de pases. Por favor, verifica tu nombre.', 'error', formMessage);
+                return;
+            }
+
+            // Check if the requested number of people exceeds the max allowed for this pass
+            if (numberOfPeople > passEntry.maxPeople) {
+                showMessage(`Excede el límite de personas para este pase. Máximo permitido para ${passEntry.name}: ${passEntry.maxPeople}.`, 'error', formMessage);
+                return;
+            }
+
+            // Check if this specific name has already confirmed
+            const existingAttendeeIndex = confirmedAttendees.findIndex(attendee => attendee.name.toLowerCase() === name.toLowerCase());
+
+            if (existingAttendeeIndex !== -1) {
+                // If attendee exists, update their number of people
+                confirmedAttendees[existingAttendeeIndex].numberOfPeople = numberOfPeople;
+                showMessage('Asistencia actualizada con éxito.', 'info', formMessage);
+            } else {
+                // Add new attendee to the array
+                confirmedAttendees.push({ name: name, numberOfPeople: numberOfPeople });
+                showMessage('¡Asistencia confirmada con éxito!', 'success', formMessage);
+            }
+
+            // Set the current guest name to filter the display
+            currentGuestName = name;
+            updateGuestAttendeeListDisplay(); // Refresh the displayed list for the current guest
+            updateOrganizerAttendeeListDisplay(); // Always update organizer view in background
+
+            // Clear the form fields and reset number of people to 1
+            nameInput.value = '';
+            numberOfPeopleInput.value = 1;
+            maxPassesInfo.textContent = ''; // Clear the pass info
+            nameSuggestionsDatalist.innerHTML = ''; // Clear suggestions
+        });
+
+        /**
+         * Converts the full attendee list (for organizer) to CSV format and triggers a download.
+         */
+        downloadBtn.addEventListener('click', () => {
+            if (confirmedAttendees.length === 0) {
+                showMessage('No hay asistentes para descargar.', 'warning', organizerMessage);
+                return;
+            }
+
+            // Create CSV header
+            let csvContent = "Nombre,Numero de Personas\n";
+
+            // Add attendee data
+            confirmedAttendees.forEach(attendee => {
+                // Escape commas in names if they exist, by enclosing in double quotes
+                const name = `"${attendee.name.replace(/"/g, '""')}"`;
+                csvContent += `${name},${attendee.numberOfPeople}\n`;
+            });
+
+            // Create a Blob from the CSV content
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+            // Create a temporary URL for the Blob
+            const url = URL.createObjectURL(blob);
+
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'lista_asistencia_completa.csv'); // Set the download file name
+            link.style.visibility = 'hidden'; // Hide the link
+
+            // Append the link to the body and click it programmatically
+            document.body.appendChild(link);
+            link.click();
+
+            // Clean up: remove the link and revoke the URL
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            showMessage('¡Lista descargada con éxito!', 'success', organizerMessage);
+        });
+
+        /**
+         * Event listener for the name input field to display max passes and suggestions.
+         */
+        nameInput.addEventListener('input', () => {
+            const name = nameInput.value.trim();
+            maxPassesInfo.textContent = ''; // Clear previous pass info
+
+            // Clear previous suggestions
+            nameSuggestionsDatalist.innerHTML = '';
+
+            if (name.length >= 3) { // Only show suggestions after 3 or more characters
+                const filteredSuggestions = passList.filter(pass =>
+                    pass.name.toLowerCase().includes(name.toLowerCase())
+                );
+
+                filteredSuggestions.forEach(pass => {
+                    const option = document.createElement('option');
+                    option.value = pass.name;
+                    nameSuggestionsDatalist.appendChild(option);
+                });
+            }
+
+            // Update max passes info based on exact match (existing logic)
+            if (name.length > 0) {
+                const passEntry = passList.find(pass => pass.name.toLowerCase() === name.toLowerCase());
+                if (passEntry) {
+                    // Changed message here to include the name
+                    maxPassesInfo.textContent = `Hola, ${passEntry.name}, tienes ${passEntry.maxPeople} pases disponibles.`;
+                    maxPassesInfo.classList.remove('text-red-600');
+                    maxPassesInfo.classList.add('text-gray-600');
+                } else {
+                    maxPassesInfo.textContent = 'Este nombre no se encuentra en la lista de pases.';
+                    maxPassesInfo.classList.remove('text-gray-600');
+                    maxPassesInfo.classList.add('text-red-600');
+                }
+            } else {
+                maxPassesInfo.textContent = ''; // Clear message if input is empty
+            }
+        });
+
+        /**
+         * Handles organizer login.
+         */
+        loginOrganizerBtn.addEventListener('click', () => {
+            const enteredPassword = organizerPasswordInput.value;
+            if (enteredPassword === ORGANIZER_PASSWORD) {
+                organizerViewDiv.classList.remove('hidden'); // Show organizer view
+                updateOrganizerAttendeeListDisplay(); // Load data into organizer view
+                showMessage('Acceso de organizador concedido.', 'success', organizerMessage);
+            } else {
+                showMessage('Contraseña incorrecta. Acceso denegado.', 'error', organizerMessage);
+            }
+            organizerPasswordInput.value = ''; // Clear password field
+        });
+
+
+        // Initial setup when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initially, no guest is "logged in", so the display is empty
+            updateGuestAttendeeListDisplay();
+            // The organizer view is hidden by default
+        });
+    </script>
+</body>
+</html>
