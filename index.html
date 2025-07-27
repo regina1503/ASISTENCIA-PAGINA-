@@ -82,6 +82,7 @@
         <!-- Organizer View (Hidden by default) -->
         <div id="organizerView" class="bg-red-50 p-6 rounded-lg border border-red-200 mt-8 hidden">
             <h2 class="text-2xl font-semibold text-red-700 mb-4">Vista de Organizador</h2>
+            <p class="text-xl font-bold text-gray-700 mb-4">Tu ID de Usuario: <span id="organizerUserId" class="text-red-600 break-all">Cargando...</span></p>
             <p class="text-xl font-bold text-gray-700 mb-4">Total de Confirmaciones: <span id="organizerAttendeeCount" class="text-red-600">0</span></p>
             <p class="text-xl font-bold text-gray-700 mb-4">Total de Personas Confirmadas: <span id="organizerTotalPeopleCount" class="text-red-600">0</span></p>
 
@@ -125,11 +126,24 @@
 
     </div>
 
-    <script>
-        // Global variables provided by the Canvas environment (not used in this simple app)
+    <script type="module">
+        // Firebase imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global variables provided by the Canvas environment
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Firestore collection path for attendees (public data)
+        const ATTENDEES_COLLECTION_PATH = `artifacts/${appId}/public/data/attendees`;
 
         // Predefined list of passes with maximum people allowed for each name
         // YOU CAN EDIT THIS LIST TO MATCH YOUR GUEST PASSES
@@ -158,23 +172,25 @@
 
         // Variable to hold the name of the guest currently interacting with the form
         let currentGuestName = '';
+        let currentUserId = ''; // To store the authenticated user ID
 
         // Get DOM elements
         const attendanceForm = document.getElementById('attendanceForm');
         const nameInput = document.getElementById('name');
-        const nameSuggestionsDatalist = document.getElementById('nameSuggestions'); // New: Datalist element
+        const nameSuggestionsDatalist = document.getElementById('nameSuggestions');
         const numberOfPeopleInput = document.getElementById('numberOfPeople');
         const attendeeCountSpan = document.getElementById('attendeeCount');
         const totalPeopleCountSpan = document.getElementById('totalPeopleCount');
-        const attendeeListTableBody = document.getElementById('attendeeList'); // Guest's own confirmation table
+        const attendeeListTableBody = document.getElementById('attendeeList');
         const formMessage = document.getElementById('formMessage');
         const maxPassesInfo = document.getElementById('maxPassesInfo');
 
         // Organizer View Elements
         const organizerViewDiv = document.getElementById('organizerView');
+        const organizerUserIdSpan = document.getElementById('organizerUserId'); // New element for User ID
         const organizerAttendeeCountSpan = document.getElementById('organizerAttendeeCount');
         const organizerTotalPeopleCountSpan = document.getElementById('organizerTotalPeopleCount');
-        const organizerAttendeeListTableBody = document.getElementById('organizerAttendeeList'); // Organizer's full list table
+        const organizerAttendeeListTableBody = document.getElementById('organizerAttendeeList');
         const downloadBtn = document.getElementById('downloadBtn');
         const organizerPasswordInput = document.getElementById('organizerPassword');
         const loginOrganizerBtn = document.getElementById('loginOrganizerBtn');
@@ -284,9 +300,9 @@
 
         /**
          * Handles the form submission to add/update a new attendee, with pass validation.
-         * This function manages the internal `confirmedAttendees` array (all data for organizer).
+         * This function now saves data to Firestore.
          */
-        attendanceForm.addEventListener('submit', (event) => {
+        attendanceForm.addEventListener('submit', async (event) => {
             event.preventDefault(); // Prevent default form submission
 
             const name = nameInput.value.trim();
@@ -312,23 +328,24 @@
                 return;
             }
 
-            // Check if this specific name has already confirmed
-            const existingAttendeeIndex = confirmedAttendees.findIndex(attendee => attendee.name.toLowerCase() === name.toLowerCase());
+            try {
+                // Save/update data in Firestore
+                // Using name as document ID for easy lookup and uniqueness
+                const docRef = doc(db, ATTENDEES_COLLECTION_PATH, name.toLowerCase());
+                await setDoc(docRef, {
+                    name: name,
+                    numberOfPeople: numberOfPeople,
+                    timestamp: new Date() // Add a timestamp for tracking
+                }, { merge: true }); // Use merge to update existing fields without overwriting others
 
-            if (existingAttendeeIndex !== -1) {
-                // If attendee exists, update their number of people
-                confirmedAttendees[existingAttendeeIndex].numberOfPeople = numberOfPeople;
-                showMessage('Asistencia actualizada con éxito.', 'info', formMessage);
-            } else {
-                // Add new attendee to the array
-                confirmedAttendees.push({ name: name, numberOfPeople: numberOfPeople });
                 showMessage('¡Asistencia confirmada con éxito!', 'success', formMessage);
-            }
 
-            // Set the current guest name to filter the display
-            currentGuestName = name;
-            updateGuestAttendeeListDisplay(); // Refresh the displayed list for the current guest
-            updateOrganizerAttendeeListDisplay(); // Always update organizer view in background
+                // The onSnapshot listener will handle updating confirmedAttendees and the UI
+                currentGuestName = name; // Set current guest name for display filter
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                showMessage('Error al confirmar asistencia. Inténtalo de nuevo.', 'error', formMessage);
+            }
 
             // Clear the form fields and reset number of people to 1
             nameInput.value = '';
@@ -347,13 +364,14 @@
             }
 
             // Create CSV header
-            let csvContent = "Nombre,Numero de Personas\n";
+            let csvContent = "Nombre,Numero de Personas,Fecha de Confirmacion\n";
 
             // Add attendee data
             confirmedAttendees.forEach(attendee => {
                 // Escape commas in names if they exist, by enclosing in double quotes
                 const name = `"${attendee.name.replace(/"/g, '""')}"`;
-                csvContent += `${name},${attendee.numberOfPeople}\n`;
+                const timestamp = attendee.timestamp ? new Date(attendee.timestamp.seconds * 1000).toLocaleString() : 'N/A';
+                csvContent += `${name},${attendee.numberOfPeople},"${timestamp}"\n`;
             });
 
             // Create a Blob from the CSV content
@@ -405,7 +423,6 @@
             if (name.length > 0) {
                 const passEntry = passList.find(pass => pass.name.toLowerCase() === name.toLowerCase());
                 if (passEntry) {
-                    // Changed message here to include the name
                     maxPassesInfo.textContent = `Hola, ${passEntry.name}, tienes ${passEntry.maxPeople} pases disponibles.`;
                     maxPassesInfo.classList.remove('text-red-600');
                     maxPassesInfo.classList.add('text-gray-600');
@@ -434,11 +451,49 @@
             organizerPasswordInput.value = ''; // Clear password field
         });
 
+        /**
+         * Firebase Authentication and Firestore Data Listener.
+         */
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                organizerUserIdSpan.textContent = currentUserId; // Display user ID in organizer view
+                console.log("Authenticated with Firebase. User ID:", currentUserId);
+
+                // Set up real-time listener for attendees
+                onSnapshot(collection(db, ATTENDEES_COLLECTION_PATH), (snapshot) => {
+                    confirmedAttendees = []; // Clear previous data
+                    snapshot.forEach((doc) => {
+                        confirmedAttendees.push(doc.data());
+                    });
+                    console.log("Attendees updated from Firestore:", confirmedAttendees);
+                    updateGuestAttendeeListDisplay(); // Update guest view
+                    updateOrganizerAttendeeListDisplay(); // Update organizer view
+                }, (error) => {
+                    console.error("Error listening to attendees collection:", error);
+                    showMessage('Error al cargar la lista de asistentes.', 'error', formMessage);
+                });
+
+            } else {
+                // Sign in anonymously if no token is provided or user is not authenticated
+                try {
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Signed in with custom token.");
+                    } else {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously.");
+                    }
+                } catch (error) {
+                    console.error("Error during Firebase authentication:", error);
+                    showMessage('Error al iniciar sesión en la aplicación.', 'error', formMessage);
+                }
+            }
+        });
 
         // Initial setup when the page loads
         document.addEventListener('DOMContentLoaded', () => {
-            // Initially, no guest is "logged in", so the display is empty
-            updateGuestAttendeeListDisplay();
+            // Firebase authentication will handle initial data loading
             // The organizer view is hidden by default
         });
     </script>
