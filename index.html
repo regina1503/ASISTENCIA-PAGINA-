@@ -3,508 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmación de Asistencia</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Momentos Encantados - Invitaciones Digitales</title>
+    <!-- Incluye Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Fuentes para un diseño elegante -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* Custom styles for Inter font and general body styling */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Light gray background */
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Align to the top to prevent content overflow */
-            min-height: 100vh; /* Minimum height to fill the viewport */
-            padding: 2rem; /* Padding around the content */
-            box-sizing: border-box; /* Include padding in element's total width and height */
         }
-        /* Ensure responsive image handling if any were added */
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Estilos personalizados para el contenedor de paquetes */
+        .packages-grid {
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         }
     </style>
 </head>
-<body>
-    <div class="container mx-auto p-6 bg-white shadow-lg rounded-xl max-w-2xl w-full">
-        <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-8">Confirmar Asistencia</h1>
+<body class="bg-[#fcf7f9] flex flex-col min-h-screen text-[#4f464e]">
 
-        <!-- Attendance Confirmation Form -->
-        <div class="bg-blue-50 p-6 rounded-lg mb-8 border border-blue-200">
-            <h2 class="text-2xl font-semibold text-blue-700 mb-4">Tu Información</h2>
-            <form id="attendanceForm" class="space-y-4">
-                <div>
-                    <label for="name" class="block text-lg font-medium text-gray-700 mb-1">Nombre Completo (como en tu pase):</label>
-                    <input type="text" id="name" name="name" required list="nameSuggestions"
-                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-lg">
-                    <datalist id="nameSuggestions"></datalist> <!-- Datalist for suggestions -->
-                    <p id="maxPassesInfo" class="text-sm text-gray-600 mt-1"></p>
+    <!-- Sección de Héroe -->
+    <header class="relative overflow-hidden bg-[#fcf7f9] py-24 px-4 md:px-8 lg:px-16 flex flex-col items-center justify-center text-center rounded-b-3xl shadow-lg">
+        <div class="relative z-10">
+            <h1 class="hero-title text-6xl md:text-7xl lg:text-8xl font-bold mb-4 text-[#bf8e97]">Momentos Encantados</h1>
+            <p class="text-lg md:text-xl max-w-2xl mb-8 font-medium text-gray-700">Crea recuerdos inolvidables con nuestras invitaciones digitales y de video personalizadas.</p>
+            <a href="#contacto" class="bg-[#bf8e97] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#a37a85] transition duration-300 transform hover:scale-105">
+                ¡Empieza tu proyecto!
+            </a>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="container mx-auto p-4 md:p-8 flex-grow">
+
+        <!-- Sección de Servicios -->
+        <section id="servicios" class="my-12 p-6 bg-white rounded-2xl shadow-xl">
+            <h2 class="text-3xl font-bold text-center mb-10 hero-title text-[#bf8e97]">Nuestros Servicios</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Tarjeta de Servicio 1 -->
+                <div class="bg-[#fcf7f9] p-6 rounded-xl shadow-md border-t-4 border-[#cdb1b8] text-center">
+                    <div class="text-4xl mb-3 text-[#bf8e97]">💌</div>
+                    <h3 class="text-xl font-semibold hero-title text-[#a37a85] mb-2">Invitaciones Digitales</h3>
+                    <p class="text-sm text-gray-700">Diseños elegantes y 100% personalizados para cualquier ocasión: bodas, quince años, cumpleaños y más.</p>
                 </div>
-                <div>
-                    <label for="numberOfPeople" class="block text-lg font-medium text-gray-700 mb-1">Cuántos pases deseas confirmar (incluyéndote):</label>
-                    <input type="number" id="numberOfPeople" name="numberOfPeople" required min="1" value="1"
-                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-lg">
+                <!-- Tarjeta de Servicio 2 -->
+                <div class="bg-[#fcf7f9] p-6 rounded-xl shadow-md border-t-4 border-[#cdb1b8] text-center">
+                    <div class="text-4xl mb-3 text-[#bf8e97]">🎬</div>
+                    <h3 class="text-xl font-semibold hero-title text-[#a37a85] mb-2">Video Invitaciones</h3>
+                    <p class="text-sm text-gray-700">Invitaciones animadas con música y efectos, perfectas para redes sociales y WhatsApp.</p>
                 </div>
-                <button type="submit"
-                        class="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-xl font-bold transition duration-200 ease-in-out transform hover:scale-105">
-                    Confirmar
+                <!-- Tarjeta de Servicio 3 -->
+                <div class="bg-[#fcf7f9] p-6 rounded-xl shadow-md border-t-4 border-[#cdb1b8] text-center">
+                    <div class="text-4xl mb-3 text-[#bf8e97]">🎨</div>
+                    <h3 class="text-xl font-semibold hero-title text-[#a37a85] mb-2">Paquetes Completos</h3>
+                    <p class="text-sm text-gray-700">Video + invitación digital + tarjeta de agradecimiento. Todo a juego para tu evento especial.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Paquetes -->
+        <section id="paquetes" class="my-12 p-6 bg-[#f5f0f3] rounded-2xl shadow-xl">
+            <h2 class="text-3xl font-bold text-center mb-10 hero-title text-[#a37a85]">Nuestros Paquetes</h2>
+            <div class="flex flex-wrap justify-center gap-6 text-center packages-grid">
+                <!-- Paquete Invitación Estática -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-[#cdb1b8] flex flex-col w-full md:w-auto flex-1 max-w-sm">
+                    <h3 class="text-xl font-bold hero-title text-[#bf8e97] mb-2">Invitación Estática (Imagen)</h3>
+                    <p class="text-3xl font-extrabold text-[#4f464e] mb-3">$69 pesos</p>
+                    <p class="text-sm text-gray-700 italic mb-3">Diseño único de imagen para tu evento.</p>
+                    <ul class="text-sm text-gray-700 text-left mb-4 flex-grow list-inside list-disc">
+                        <li class="mb-1">Diseño de imagen personalizado</li>
+                        <li class="mb-1">Perfecto para compartir por redes sociales</li>
+                    </ul>
+                    <a href="https://wa.me/521234567890?text=Hola,%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20paquete%20Invitaci%C3%B3n%20Est%C3%A1tica" 
+                       target="_blank" class="bg-[#bf8e97] text-white font-bold py-2 px-5 rounded-full shadow-lg hover:bg-[#a37a85] transition duration-300 text-sm">
+                        Más Información
+                    </a>
+                </div>
+                <!-- Paquete Invitación Interactiva (PDF) -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-[#cdb1b8] flex flex-col w-full md:w-auto flex-1 max-w-sm">
+                    <h3 class="text-xl font-bold hero-title text-[#bf8e97] mb-2">Invitación Interactiva (PDF)</h3>
+                    <p class="text-3xl font-extrabold text-[#4f464e] mb-3">$119 pesos</p>
+                    <p class="text-sm text-gray-700 italic mb-3">Invitación en formato PDF con 1 botón de ubicación y 1 de confirmación de asistencia.</p>
+                    <ul class="text-sm text-gray-700 text-left mb-4 flex-grow list-inside list-disc">
+                        <li class="mb-1">Invitación en formato PDF</li>
+                        <li class="mb-1">Botón de ubicación</li>
+                        <li class="mb-1">Botón de confirmación de asistencia</li>
+                    </ul>
+                    <a href="https://wa.me/521234567890?text=Hola,%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20paquete%20Invitaci%C3%B3n%20Interactiva%20(PDF)" 
+                       target="_blank" class="bg-[#bf8e97] text-white font-bold py-2 px-5 rounded-full shadow-lg hover:bg-[#a37a85] transition duration-300 text-sm">
+                        Más Información
+                    </a>
+                </div>
+                <!-- Paquete Video Invitación -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-[#cdb1b8] flex flex-col w-full md:w-auto flex-1 max-w-sm scale-105 transform">
+                    <h3 class="text-xl font-bold hero-title text-[#bf8e97] mb-2">Video Invitación</h3>
+                    <p class="text-3xl font-extrabold text-[#4f464e] mb-3">$139 pesos</p>
+                    <p class="text-sm text-gray-700 italic mb-3">Video dinámico (aprox. 30 seg. a 1 min.) con diseño personalizado.</p>
+                    <ul class="text-sm text-gray-700 text-left mb-4 flex-grow list-inside list-disc">
+                        <li class="mb-1">Diseño personalizado</li>
+                        <li class="mb-1">Duración de 30 segundos a 1 minuto</li>
+                        <li class="mb-1">Ideal para redes sociales y WhatsApp</li>
+                    </ul>
+                    <a href="https://wa.me/521234567890?text=Hola,%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20paquete%20Video%20Invitaci%C3%B3n" 
+                       target="_blank" class="bg-[#bf8e97] text-white font-bold py-2 px-5 rounded-full shadow-lg hover:bg-[#a37a85] transition duration-300 text-sm">
+                        Más Información
+                    </a>
+                </div>
+                <!-- Paquete Video Invitación Interactiva -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-[#cdb1b8] flex flex-col w-full md:w-auto flex-1 max-w-sm">
+                    <h3 class="text-xl font-bold hero-title text-[#bf8e97] mb-2">Video Invitación Interactiva</h3>
+                    <p class="text-3xl font-extrabold text-[#4f464e] mb-3">$159 pesos</p>
+                    <p class="text-sm text-gray-700 italic mb-3">Video invitación con 1 botón de ubicación y 1 de confirmación de asistencia.</p>
+                    <ul class="text-sm text-gray-700 text-left mb-4 flex-grow list-inside list-disc">
+                        <li class="mb-1">Video con diseño personalizado</li>
+                        <li class="mb-1">Botón de ubicación</li>
+                        <li class="mb-1">Botón de confirmación de asistencia</li>
+                    </ul>
+                    <a href="https://wa.me/521234567890?text=Hola,%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20paquete%20Video%20Invitaci%C3%B3n%20Interactiva" 
+                       target="_blank" class="bg-[#bf8e97] text-white font-bold py-2 px-5 rounded-full shadow-lg hover:bg-[#a37a85] transition duration-300 text-sm">
+                        Más Información
+                    </a>
+                </div>
+                <!-- Paquete Web Básica -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-[#cdb1b8] flex flex-col w-full md:w-auto flex-1 max-w-sm">
+                    <h3 class="text-xl font-bold hero-title text-[#bf8e97] mb-2">Web Básica</h3>
+                    <p class="text-3xl font-extrabold text-[#4f464e] mb-3">$179 pesos</p>
+                    <p class="text-sm text-gray-700 italic mb-3">Página web del evento con funciones esenciales.</p>
+                    <ul class="text-sm text-gray-700 text-left mb-4 flex-grow list-inside list-disc">
+                        <li class="mb-1">Música</li>
+                        <li class="mb-1">1 Botón de ubicación</li>
+                        <li class="mb-1">1 Botón de confirmación</li>
+                        <li class="mb-1">Cuenta Regresiva</li>
+                        <li class="mb-1">Datos básicos del evento</li>
+                    </ul>
+                    <a href="https://wa.me/521234567890?text=Hola,%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20paquete%20Web%20B%C3%A1sica" 
+                       target="_blank" class="bg-[#bf8e97] text-white font-bold py-2 px-5 rounded-full shadow-lg hover:bg-[#a37a85] transition duration-300 text-sm">
+                        Más Información
+                    </a>
+                </div>
+                <!-- Paquete Web Bronce -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-[#cdb1b8] flex flex-col w-full md:w-auto flex-1 max-w-sm">
+                    <h3 class="text-xl font-bold hero-title text-[#bf8e97] mb-2">Web Bronce</h3>
+                    <p class="text-3xl font-extrabold text-[#4f464e] mb-3">$329 pesos</p>
+                    <p class="text-sm text-gray-700 italic mb-3">Página web completa para tu evento con funciones interactivas.</p>
+                    <ul class="text-sm text-gray-700 text-left mb-4 flex-grow list-inside list-disc">
+                        <li class="mb-1">Frase de su elección</li>
+                        <li class="mb-1">Música</li>
+                        <li class="mb-1">2 Botones de ubicación</li>
+                        <li class="mb-1">1 Botón de confirmación</li>
+                        <li class="mb-1">Cuenta Regresiva</li>
+                        <li class="mb-1">Nombre de papás</li>
+                        <li class="mb-1">Lluvia de sobres</li>
+                        <li class="mb-1">Galería de fotos</li>
+                        <li class="mb-1">Código de vestimenta</li>
+                    </ul>
+                    <a href="https://wa.me/521234567890?text=Hola,%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20paquete%20Web%20Bronce" 
+                       target="_blank" class="bg-[#bf8e97] text-white font-bold py-2 px-5 rounded-full shadow-lg hover:bg-[#a37a85] transition duration-300 text-sm">
+                        Más Información
+                    </a>
+                </div>
+                <!-- Paquete Web Plata -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-[#cdb1b8] flex flex-col w-full md:w-auto flex-1 max-w-sm">
+                    <h3 class="text-xl font-bold hero-title text-[#bf8e97] mb-2">Web Plata</h3>
+                    <p class="text-3xl font-extrabold text-[#4f464e] mb-3">$499 pesos</p>
+                    <p class="text-sm text-gray-700 italic mb-3">Página web avanzada para tu evento con pases digitales y más.</p>
+                    <ul class="text-sm text-gray-700 text-left mb-4 flex-grow list-inside list-disc">
+                        <li class="mb-1">Frase de su elección</li>
+                        <li class="mb-1">Música</li>
+                        <li class="mb-1">2 Botones de ubicación</li>
+                        <li class="mb-1">1 Botón de confirmación</li>
+                        <li class="mb-1">Cuenta Regresiva</li>
+                        <li class="mb-1">Pases digitales para 150 personas</li>
+                        <li class="mb-1">Lluvia de sobres</li>
+                        <li class="mb-1">Galería de fotos</li>
+                        <li class="mb-1">Código de vestimenta</li>
+                    </ul>
+                    <a href="https://wa.me/521234567890?text=Hola,%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20paquete%20Web%20Plata" 
+                       target="_blank" class="bg-[#bf8e97] text-white font-bold py-2 px-5 rounded-full shadow-lg hover:bg-[#a37a85] transition duration-300 text-sm">
+                        Más Información
+                    </a>
+                </div>
+                <!-- Paquete Web Oro -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-[#cdb1b8] flex flex-col w-full md:w-auto flex-1 max-w-sm">
+                    <h3 class="text-xl font-bold hero-title text-[#bf8e97] mb-2">Web Oro</h3>
+                    <p class="text-3xl font-extrabold text-[#4f464e] mb-3">$659 pesos</p>
+                    <p class="text-sm text-gray-700 italic mb-3">Página web premium con galería de fotos dinámica y opciones de hospedaje.</p>
+                    <ul class="text-sm text-gray-700 text-left mb-4 flex-grow list-inside list-disc">
+                        <li class="mb-1">Frase de su elección</li>
+                        <li class="mb-1">Música</li>
+                        <li class="mb-1">2 Botones de ubicación</li>
+                        <li class="mb-1">1 Botón de confirmación</li>
+                        <li class="mb-1">Pases digitales ilimitados</li>
+                        <li class="mb-1">Cuenta regresiva</li>
+                        <li class="mb-1">Lluvia de sobres/mesa de regalos</li>
+                        <li class="mb-1">Galería de fotos dinámica</li>
+                        <li class="mb-1">Opciones de hospedaje</li>
+                        <li class="mb-1">Código de vestimenta</li>
+                    </ul>
+                    <a href="https://wa.me/521234567890?text=Hola,%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20paquete%20Web%20Oro" 
+                       target="_blank" class="bg-[#bf8e97] text-white font-bold py-2 px-5 rounded-full shadow-lg hover:bg-[#a37a85] transition duration-300 text-sm">
+                        Más Información
+                    </a>
+                </div>
+                <!-- Paquete Web Oro Plus -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-[#cdb1b8] flex flex-col w-full md:w-auto flex-1 max-w-sm">
+                    <h3 class="text-xl font-bold hero-title text-[#bf8e97] mb-2">Web Oro Plus</h3>
+                    <p class="text-3xl font-extrabold text-[#4f464e] mb-3">$799 pesos</p>
+                    <p class="text-sm text-gray-700 italic mb-3">El paquete más completo con QR de acceso y para subir fotos el día del evento.</p>
+                    <ul class="text-sm text-gray-700 text-left mb-4 flex-grow list-inside list-disc">
+                        <li class="mb-1">Frase de su elección</li>
+                        <li class="mb-1">Música</li>
+                        <li class="mb-1">2 Botones de ubicación</li>
+                        <li class="mb-1">1 Botón de confirmación</li>
+                        <li class="mb-1">Pases digitales ilimitados</li>
+                        <li class="mb-1">Cuenta regresiva</li>
+                        <li class="mb-1">Lluvia de sobres/mesa de regalos</li>
+                        <li class="mb-1">Galería de fotos dinámica</li>
+                        <li class="mb-1">Opciones de hospedaje</li>
+                        <li class="mb-1">Código de vestimenta</li>
+                        <li class="mb-1">QR de acceso al evento</li>
+                        <li class="mb-1">QR de fotos para subir fotos el día del evento</li>
+                    </ul>
+                    <a href="https://wa.me/521234567890?text=Hola,%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20paquete%20Web%20Oro%20Plus" 
+                       target="_blank" class="bg-[#bf8e97] text-white font-bold py-2 px-5 rounded-full shadow-lg hover:bg-[#a37a85] transition duration-300 text-sm">
+                        Más Información
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Portafolio -->
+        <section id="portafolio" class="my-12 p-6 bg-[#f5f0f3] rounded-2xl shadow-xl">
+            <h2 class="text-3xl font-bold text-center mb-10 hero-title text-[#a37a85]">Nuestro Portafolio</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Galería de imágenes (placeholders) -->
+                <div class="relative group rounded-xl overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105">
+                    <img src="https://placehold.co/400x600/fcf7f9/876673?text=Invitacion+1" alt="Ejemplo de invitación digital" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="text-white text-base font-bold hero-title">Invitación de Boda</span>
+                    </div>
+                </div>
+                <div class="relative group rounded-xl overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105">
+                    <img src="https://placehold.co/400x600/fcf7f9/876673?text=Invitacion+2" alt="Ejemplo de invitación de 15 años" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="text-white text-base font-bold hero-title">Invitación de XV Años</span>
+                    </div>
+                </div>
+                <div class="relative group rounded-xl overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105">
+                    <img src="https://placehold.co/400x600/fcf7f9/876673?text=Invitacion+3" alt="Ejemplo de invitación de cumpleaños" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="text-white text-base font-bold hero-title">Invitación de Cumpleaños</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sección "Cómo Funciona" -->
+        <section id="como-funciona" class="my-12 p-6 bg-white rounded-2xl shadow-xl">
+            <h2 class="text-3xl font-bold text-center mb-10 hero-title text-[#bf8e97]">¿Cómo Funciona?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div class="flex flex-col items-center">
+                    <div class="w-10 h-10 bg-[#fcf7f9] text-[#bf8e97] rounded-full flex items-center justify-center text-xl font-bold mb-2 border-2 border-[#cdb1b8]">1</div>
+                    <h3 class="text-base font-semibold mb-1">Elige tu diseño</h3>
+                    <p class="text-xs text-gray-700">Explora nuestro portafolio y elige el estilo que más te guste o cuéntanos tu idea.</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-10 h-10 bg-[#fcf7f9] text-[#bf8e97] rounded-full flex items-center justify-center text-xl font-bold mb-2 border-2 border-[#cdb1b8]">2</div>
+                    <h3 class="text-base font-semibold mb-1">Personalizamos</h3>
+                    <p class="text-xs text-gray-700">Te pediremos los datos del evento, fotos y la música para crear un diseño único para ti, y una vez listo se te compartirá evidencia.</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-10 h-10 bg-[#fcf7f9] text-[#bf8e97] rounded-full flex items-center justify-center text-xl font-bold mb-2 border-2 border-[#cdb1b8]">3</div>
+                    <h3 class="text-base font-semibold mb-1">Realiza tu pago y recibe</h3>
+                    <p class="text-xs text-gray-700">Una vez aprobado el diseño, realiza tu pago para recibir tu invitación en formato digital o video, lista para ser compartida.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Contacto -->
+        <section id="contacto" class="my-12 p-6 bg-[#f5f0f3] rounded-2xl shadow-xl">
+            <h2 class="text-3xl font-bold text-center mb-10 hero-title text-[#a37a85]">Contáctanos</h2>
+            <form id="contactForm" class="max-w-lg mx-auto bg-white p-6 rounded-xl shadow-md">
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-700 font-semibold mb-1">Nombre Completo</label>
+                    <input type="text" id="name" name="name" class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#cdb1b8]" required>
+                </div>
+                <div class="mb-4">
+                    <label for="phone" class="block text-gray-700 font-semibold mb-1">Teléfono</label>
+                    <input type="tel" id="phone" name="phone" class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#cdb1b8]" required>
+                </div>
+                <div class="mb-4">
+                    <label for="invitationType" class="block text-gray-700 font-semibold mb-1">Tipo de Invitación (ej. Boda, XV Años)</label>
+                    <input type="text" id="invitationType" name="invitationType" class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#cdb1b8]" required>
+                </div>
+                <button type="submit" class="w-full bg-[#bf8e97] text-white font-bold py-2 px-5 rounded-full shadow-lg hover:bg-[#a37a85] transition duration-300 text-sm">
+                    Enviar por WhatsApp
                 </button>
             </form>
-            <p id="formMessage" class="mt-4 text-center text-green-600 font-semibold hidden"></p>
-        </div>
+        </section>
 
-        <!-- Confirmed Attendee's Own Confirmation Display -->
-        <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Tu Confirmación</h2>
-            <!-- These counts will now reflect only the current user's confirmation -->
-            <p class="text-xl font-bold text-gray-700 mb-4">Tu Confirmación Registrada: <span id="attendeeCount" class="text-blue-600">0</span></p>
-            <p class="text-xl font-bold text-gray-700 mb-4">Total de Personas en Tu Confirmación: <span id="totalPeopleCount" class="text-blue-600">0</span></p>
+    </main>
 
-            <div class="overflow-x-auto mb-6 max-h-80">
-                <table class="min-w-full bg-white rounded-lg shadow-sm">
-                    <thead>
-                        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                            <th class="py-3 px-6 text-left rounded-tl-lg">Nombre</th>
-                            <th class="py-3 px-6 text-left rounded-tr-lg">Número de Personas</th>
-                        </tr>
-                    </thead>
-                    <tbody id="attendeeList" class="text-gray-700 text-base">
-                        <!-- Only the current user's confirmation will be listed here -->
-                        <tr class="border-b border-gray-200 last:border-b-0">
-                            <td class="py-3 px-6 text-left whitespace-nowrap" colspan="2">Aún no has confirmado tu asistencia.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <!-- Pie de página -->
+    <footer class="bg-[#876673] text-white p-6 text-center rounded-t-3xl shadow-lg">
+        <p class="text-sm">&copy; 2024 Momentos Encantados. Todos los derechos reservados.</p>
+    </footer>
+    
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Previene el envío del formulario por defecto
 
-        <!-- Organizer View (Hidden by default) -->
-        <div id="organizerView" class="bg-red-50 p-6 rounded-lg border border-red-200 mt-8 hidden">
-            <h2 class="text-2xl font-semibold text-red-700 mb-4">Vista de Organizador</h2>
-            <p class="text-xl font-bold text-gray-700 mb-4">Tu ID de Usuario: <span id="organizerUserId" class="text-red-600 break-all">Cargando...</span></p>
-            <p class="text-xl font-bold text-gray-700 mb-4">Total de Confirmaciones: <span id="organizerAttendeeCount" class="text-red-600">0</span></p>
-            <p class="text-xl font-bold text-gray-700 mb-4">Total de Personas Confirmadas: <span id="organizerTotalPeopleCount" class="text-red-600">0</span></p>
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const invitationType = document.getElementById('invitationType').value;
 
-            <div class="overflow-x-auto mb-6 max-h-80">
-                <table class="min-w-full bg-white rounded-lg shadow-sm">
-                    <thead>
-                        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                            <th class="py-3 px-6 text-left rounded-tl-lg">Nombre</th>
-                            <th class="py-3 px-6 text-left rounded-tr-lg">Número de Personas</th>
-                        </tr>
-                    </thead>
-                    <tbody id="organizerAttendeeList" class="text-gray-700 text-base">
-                        <!-- All confirmed attendees will be listed here for the organizer -->
-                    </tbody>
-                </table>
-            </div>
+            // Formato del mensaje para WhatsApp
+            const message = `Hola, mi nombre es ${name}. Estoy interesado(a) en una invitación de tipo "${invitationType}". Mi teléfono es ${phone}.`;
 
-            <!-- Download Button -->
-            <button id="downloadBtn"
-                    class="w-full bg-green-600 text-white py-3 px-6 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-xl font-bold transition duration-200 ease-in-out transform hover:scale-105">
-                Descargar Lista Completa (CSV)
-            </button>
-        </div>
+            // Codificar el mensaje para la URL
+            const encodedMessage = encodeURIComponent(message);
 
-        <!-- Organizer Login Section -->
-        <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-200 mt-8">
-            <h2 class="text-2xl font-semibold text-yellow-700 mb-4">Acceso de Organizador</h2>
-            <div class="space-y-4">
-                <div>
-                    <label for="organizerPassword" class="block text-lg font-medium text-gray-700 mb-1">Contraseña de Organizador:</label>
-                    <input type="password" id="organizerPassword"
-                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 text-lg">
-                </div>
-                <button id="loginOrganizerBtn"
-                        class="w-full bg-yellow-600 text-white py-3 px-6 rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-xl font-bold transition duration-200 ease-in-out transform hover:scale-105">
-                    Acceder como Organizador
-                </button>
-            </div>
-            <p id="organizerMessage" class="mt-4 text-center text-red-600 font-semibold hidden"></p>
-        </div>
+            // Número de teléfono de destino (con código de país)
+            const phoneNumber = '524426084804';
 
-    </div>
+            // Construir la URL de WhatsApp
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
-    <script type="module">
-        // Firebase imports
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Global variables provided by the Canvas environment
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        // Firestore collection path for attendees (public data)
-        const ATTENDEES_COLLECTION_PATH = `artifacts/${appId}/public/data/attendees`;
-
-        // Predefined list of passes with maximum people allowed for each name
-        // YOU CAN EDIT THIS LIST TO MATCH YOUR GUEST PASSES
-        // IMPORTANT: This list is in the client-side code. For true security and multi-user access control,
-        // this data should be managed on a secure backend and accessed via an authenticated API.
-        let passList = [
-            { name: "Regina Contreras", maxPeople: 4 },
-            { name: "Lupita Contreras", maxPeople: 2 },
-            { name: "Mauro Contreras", maxPeople: 6 },
-            { name: "Reina Ruiz", maxPeople: 2 },
-            { name: "Romina Perez", maxPeople: 2 },
-            { name: "Martha Aguilar", maxPeople: 2 },
-            { name: "Juan Perez", maxPeople: 2 },
-            { name: "Maria Garcia", maxPeople: 3 },
-            { name: "Carlos Sanchez", maxPeople: 1 },
-            { name: "Ana Lopez", maxPeople: 4 },
-            { name: "Pedro Martinez", maxPeople: 2 },
-            { name: "Sofia Rodriguez", maxPeople: 1 }
-        ];
-
-        // Organizer Password (VERY IMPORTANT: Change this to a strong password!)
-        const ORGANIZER_PASSWORD = "miContrasenaSecreta"; // <<< CAMBIA ESTO A UNA CONTRASEÑA SEGURA
-
-        // Array to store ALL confirmed attendees (this array holds all data for the organizer)
-        let confirmedAttendees = [];
-
-        // Variable to hold the name of the guest currently interacting with the form
-        // This will now be loaded from localStorage
-        let currentGuestName = localStorage.getItem('lastConfirmedGuestName') || '';
-        let currentUserId = ''; // To store the authenticated user ID
-
-        // Get DOM elements
-        const attendanceForm = document.getElementById('attendanceForm');
-        const nameInput = document.getElementById('name');
-        const nameSuggestionsDatalist = document.getElementById('nameSuggestions');
-        const numberOfPeopleInput = document.getElementById('numberOfPeople');
-        const attendeeCountSpan = document.getElementById('attendeeCount');
-        const totalPeopleCountSpan = document.getElementById('totalPeopleCount');
-        const attendeeListTableBody = document.getElementById('attendeeList');
-        const formMessage = document.getElementById('formMessage');
-        const maxPassesInfo = document.getElementById('maxPassesInfo');
-
-        // Organizer View Elements
-        const organizerViewDiv = document.getElementById('organizerView');
-        const organizerUserIdSpan = document.getElementById('organizerUserId');
-        const organizerAttendeeCountSpan = document.getElementById('organizerAttendeeCount');
-        const organizerTotalPeopleCountSpan = document.getElementById('organizerTotalPeopleCount');
-        const organizerAttendeeListTableBody = document.getElementById('organizerAttendeeList');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const organizerPasswordInput = document.getElementById('organizerPassword');
-        const loginOrganizerBtn = document.getElementById('loginOrganizerBtn');
-        const organizerMessage = document.getElementById('organizerMessage');
-
-        /**
-         * Updates the displayed list of attendees and the total count,
-         * showing only the entry for the `currentGuestName` in the guest view.
-         */
-        function updateGuestAttendeeListDisplay() {
-            console.log("updateGuestAttendeeListDisplay called. currentGuestName:", currentGuestName);
-            attendeeListTableBody.innerHTML = ''; // Clear existing list
-
-            let confirmedForCurrentGuest = null;
-            let totalPeopleForCurrentGuest = 0;
-            let confirmationCountForCurrentGuest = 0;
-
-            // Find the confirmation for the current guest
-            if (currentGuestName) {
-                confirmedForCurrentGuest = confirmedAttendees.find(attendee => attendee.name.toLowerCase() === currentGuestName.toLowerCase());
-                console.log("Confirmed for current guest:", confirmedForCurrentGuest);
-            }
-
-            if (confirmedForCurrentGuest) {
-                // Display the current guest's confirmation
-                const row = document.createElement('tr');
-                row.className = 'border-b border-gray-200 last:border-b-0 hover:bg-gray-100';
-                row.innerHTML = `
-                    <td class="py-3 px-6 text-left whitespace-nowrap">${confirmedForCurrentGuest.name}</td>
-                    <td class="py-3 px-6 text-left">${confirmedForCurrentGuest.numberOfPeople}</td>
-                `;
-                attendeeListTableBody.appendChild(row);
-                totalPeopleForCurrentGuest = confirmedForCurrentGuest.numberOfPeople;
-                confirmationCountForCurrentGuest = 1; // Only one confirmation entry per guest
-            } else {
-                // Display a message if the current guest has not confirmed yet
-                const row = document.createElement('tr');
-                row.className = 'border-b border-gray-200 last:border-b-0';
-                row.innerHTML = `
-                    <td class="py-3 px-6 text-left whitespace-nowrap" colspan="2">Aún no has confirmado tu asistencia.</td>
-                `;
-                attendeeListTableBody.appendChild(row);
-            }
-
-            // Update the counts for the current guest's display
-            attendeeCountSpan.textContent = confirmationCountForCurrentGuest;
-            totalPeopleCountSpan.textContent = totalPeopleForCurrentGuest;
-        }
-
-        /**
-         * Updates the full list of attendees and total counts for the organizer view.
-         */
-        function updateOrganizerAttendeeListDisplay() {
-            console.log("updateOrganizerAttendeeListDisplay called. Confirmed attendees:", confirmedAttendees);
-            organizerAttendeeListTableBody.innerHTML = ''; // Clear existing list
-
-            let totalConfirmations = 0;
-            let totalPeopleOverall = 0;
-
-            if (confirmedAttendees.length === 0) {
-                const row = document.createElement('tr');
-                row.className = 'border-b border-gray-200 last:border-b-0';
-                row.innerHTML = `
-                    <td class="py-3 px-6 text-left whitespace-nowrap" colspan="2">No hay asistentes confirmados aún.</td>
-                `;
-                organizerAttendeeListTableBody.appendChild(row);
-            } else {
-                confirmedAttendees.forEach(attendee => {
-                    const row = document.createElement('tr');
-                    row.className = 'border-b border-gray-200 last:border-b-0 hover:bg-gray-100';
-                    row.innerHTML = `
-                        <td class="py-3 px-6 text-left whitespace-nowrap">${attendee.name}</td>
-                        <td class="py-3 px-6 text-left">${attendee.numberOfPeople}</td>
-                    `;
-                    organizerAttendeeListTableBody.appendChild(row);
-                    totalConfirmations++;
-                    totalPeopleOverall += attendee.numberOfPeople;
-                });
-            }
-
-            organizerAttendeeCountSpan.textContent = totalConfirmations;
-            organizerTotalPeopleCountSpan.textContent = totalPeopleOverall;
-        }
-
-        /**
-         * Displays a message to the user for a short period.
-         * @param {string} message - The message to display.
-         * @param {string} type - The type of message ('success', 'error', 'warning', 'info').
-         * @param {HTMLElement} targetElement - The element where the message should be displayed.
-         */
-        function showMessage(message, type, targetElement) {
-            targetElement.textContent = message;
-            targetElement.classList.remove('hidden', 'text-green-600', 'text-red-600', 'text-orange-600', 'text-blue-600');
-            if (type === 'success') {
-                targetElement.classList.add('text-green-600');
-            } else if (type === 'error') {
-                targetElement.classList.add('text-red-600');
-            } else if (type === 'warning') {
-                targetElement.classList.add('text-orange-600');
-            } else if (type === 'info') {
-                targetElement.classList.add('text-blue-600');
-            }
-            targetElement.classList.remove('hidden');
-
-            setTimeout(() => {
-                targetElement.classList.add('hidden');
-            }, 3000);
-        }
-
-        /**
-         * Handles the form submission to add/update a new attendee, with pass validation.
-         * This function now saves data to Firestore.
-         */
-        attendanceForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent default form submission
-
-            const name = nameInput.value.trim();
-            const numberOfPeople = parseInt(numberOfPeopleInput.value.trim(), 10);
-
-            // Validate input
-            if (!name || isNaN(numberOfPeople) || numberOfPeople <= 0) {
-                showMessage('Por favor, completa un nombre válido y un número de personas mayor que 0.', 'error', formMessage);
-                return;
-            }
-
-            // Find the pass entry for the given name (case-insensitive)
-            const passEntry = passList.find(pass => pass.name.toLowerCase() === name.toLowerCase());
-
-            if (!passEntry) {
-                showMessage('El nombre no se encuentra en la lista de pases. Por favor, verifica tu nombre.', 'error', formMessage);
-                return;
-            }
-
-            // Check if the requested number of people exceeds the max allowed for this pass
-            if (numberOfPeople > passEntry.maxPeople) {
-                showMessage(`Excede el límite de personas para este pase. Máximo permitido para ${passEntry.name}: ${passEntry.maxPeople}.`, 'error', formMessage);
-                return;
-            }
-
-            try {
-                // Save/update data in Firestore
-                // Using name as document ID for easy lookup and uniqueness
-                const docRef = doc(db, ATTENDEES_COLLECTION_PATH, name.toLowerCase());
-                await setDoc(docRef, {
-                    name: name,
-                    numberOfPeople: numberOfPeople,
-                    timestamp: new Date() // Add a timestamp for tracking
-                }, { merge: true }); // Use merge to update existing fields without overwriting others
-
-                showMessage('¡Asistencia confirmada con éxito!', 'success', formMessage);
-
-                // Set current guest name and save to localStorage
-                currentGuestName = name;
-                localStorage.setItem('lastConfirmedGuestName', name);
-
-                // The onSnapshot listener will handle updating confirmedAttendees and the UI
-            } catch (e) {
-                console.error("Error adding document to Firestore: ", e);
-                showMessage('Error al confirmar asistencia. Inténtalo de nuevo.', 'error', formMessage);
-            }
-
-            // Clear the form fields and reset number of people to 1
-            nameInput.value = '';
-            numberOfPeopleInput.value = 1;
-            maxPassesInfo.textContent = ''; // Clear the pass info
-            nameSuggestionsDatalist.innerHTML = ''; // Clear suggestions
-        });
-
-        /**
-         * Converts the full attendee list (for organizer) to CSV format and triggers a download.
-         */
-        downloadBtn.addEventListener('click', () => {
-            if (confirmedAttendees.length === 0) {
-                showMessage('No hay asistentes para descargar.', 'warning', organizerMessage);
-                return;
-            }
-
-            // Create CSV header
-            let csvContent = "Nombre,Numero de Personas,Fecha de Confirmacion\n";
-
-            // Add attendee data
-            confirmedAttendees.forEach(attendee => {
-                // Escape commas in names if they exist, by enclosing in double quotes
-                const name = `"${attendee.name.replace(/"/g, '""')}"`;
-                const timestamp = attendee.timestamp ? new Date(attendee.timestamp.seconds * 1000).toLocaleString() : 'N/A';
-                csvContent += `${name},${attendee.numberOfPeople},"${timestamp}"\n`;
-            });
-
-            // Create a Blob from the CSV content
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-            // Create a temporary URL for the Blob
-            const url = URL.createObjectURL(blob);
-
-            // Create a temporary link element
-            const link = document.createElement('a');
-            link.setAttribute('href', url);
-            link.setAttribute('download', 'lista_asistencia_completa.csv'); // Set the download file name
-            link.style.visibility = 'hidden'; // Hide the link
-
-            // Append the link to the body and click it programmatically
-            document.body.appendChild(link);
-            link.click();
-
-            // Clean up: remove the link and revoke the URL
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-
-            showMessage('¡Lista descargada con éxito!', 'success', organizerMessage);
-        });
-
-        /**
-         * Event listener for the name input field to display max passes and suggestions.
-         */
-        nameInput.addEventListener('input', () => {
-            const name = nameInput.value.trim();
-            maxPassesInfo.textContent = ''; // Clear previous pass info
-
-            // Clear previous suggestions
-            nameSuggestionsDatalist.innerHTML = '';
-
-            if (name.length >= 3) { // Only show suggestions after 3 or more characters
-                const filteredSuggestions = passList.filter(pass =>
-                    pass.name.toLowerCase().includes(name.toLowerCase())
-                );
-
-                filteredSuggestions.forEach(pass => {
-                    const option = document.createElement('option');
-                    option.value = pass.name;
-                    nameSuggestionsDatalist.appendChild(option);
-                });
-            }
-
-            // Update max passes info based on exact match (existing logic)
-            if (name.length > 0) {
-                const passEntry = passList.find(pass => pass.name.toLowerCase() === name.toLowerCase());
-                if (passEntry) {
-                    maxPassesInfo.textContent = `Hola, ${passEntry.name}, tienes ${passEntry.maxPeople} pases disponibles.`;
-                    maxPassesInfo.classList.remove('text-red-600');
-                    maxPassesInfo.classList.add('text-gray-600');
-                } else {
-                    maxPassesInfo.textContent = 'Este nombre no se encuentra en la lista de pases.';
-                    maxPassesInfo.classList.remove('text-gray-600');
-                    maxPassesInfo.classList.add('text-red-600');
-                }
-            } else {
-                maxPassesInfo.textContent = ''; // Clear message if input is empty
-            }
-        });
-
-        /**
-         * Handles organizer login.
-         */
-        loginOrganizerBtn.addEventListener('click', () => {
-            const enteredPassword = organizerPasswordInput.value;
-            if (enteredPassword === ORGANIZER_PASSWORD) {
-                organizerViewDiv.classList.remove('hidden'); // Show organizer view
-                updateOrganizerAttendeeListDisplay(); // Load data into organizer view
-                showMessage('Acceso de organizador concedido.', 'success', organizerMessage);
-            } else {
-                showMessage('Contraseña incorrecta. Acceso denegado.', 'error', organizerMessage);
-            }
-            organizerPasswordInput.value = ''; // Clear password field
-        });
-
-        /**
-         * Firebase Authentication and Firestore Data Listener.
-         */
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUserId = user.uid;
-                organizerUserIdSpan.textContent = currentUserId;
-                console.log("Authenticated with Firebase. User ID:", currentUserId);
-
-                // Set up real-time listener for attendees
-                onSnapshot(collection(db, ATTENDEES_COLLECTION_PATH), (snapshot) => {
-                    console.log("Firestore snapshot received.");
-                    confirmedAttendees = []; // Clear previous data
-                    snapshot.forEach((doc) => {
-                        confirmedAttendees.push(doc.data());
-                    });
-                    console.log("Attendees updated from Firestore:", confirmedAttendees);
-                    updateGuestAttendeeListDisplay(); // Update guest view
-                    updateOrganizerAttendeeListDisplay(); // Update organizer view
-                }, (error) => {
-                    console.error("Error listening to attendees collection:", error);
-                    showMessage('Error al cargar la lista de asistentes.', 'error', formMessage);
-                });
-
-            } else {
-                // Sign in anonymously if no token is provided or user is not authenticated
-                try {
-                    console.log("Attempting Firebase authentication...");
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                        console.log("Signed in with custom token.");
-                    } else {
-                        await signInAnonymously(auth);
-                        console.log("Signed in anonymously.");
-                    }
-                } catch (error) {
-                    console.error("Error during Firebase authentication:", error);
-                    showMessage('Error al iniciar sesión en la aplicación.', 'error', formMessage);
-                }
-            }
-        });
-
-        // Initial setup when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            // Firebase authentication will handle initial data loading via onAuthStateChanged
-            // The organizer view is hidden by default
-            console.log("DOM Content Loaded. Initial guest name from localStorage:", currentGuestName);
-            // No need to call updateGuestAttendeeListDisplay here directly, onSnapshot will do it once data is loaded
+            // Abrir el chat de WhatsApp en una nueva pestaña
+            window.open(whatsappUrl, '_blank');
         });
     </script>
 </body>
